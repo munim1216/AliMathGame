@@ -19,6 +19,7 @@ public class Player {
     public void incrementScore() {
         score++;
     }
+    public void decrementScore() {score--;}
 
     public void reset() {
         score = 0;
