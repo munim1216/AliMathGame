@@ -60,14 +60,40 @@ public class MathGame {
                     lossStreak++;
                     currentPlayer.decrementScore();
                     swapPlayers();
+                    if (currentPlayer.getScore() >= 10) {
+                        winner = currentPlayer;
+                        gameOver = true;
+                    }
                 }
                 if (lossStreak == 2) {
                     gameOver = true;
                     determineWinner();
                 }
             } else {
-                boolean correct = askQuestion(); // helper method that has harder questions
+                boolean correct = askHardQuestion(); // helper method that has harder questions
+                if (correct) {
+                    System.out.println("Correct!");
+                    lossStreak = 0;
+                    currentPlayer.incrementScore();  // this increments the currentPlayer's score
+                    currentPlayer.incrementScore();
+                    if (currentPlayer.getScore() >= 10) {
+                        winner = currentPlayer;
+                        gameOver = true;
+                    }
+                    swapPlayers();  // this helper method (shown below) sets currentPlayer to the other Player
+                } else {
+                    System.out.println("INCORRECT!");
+                    lossStreak++;
+                    currentPlayer.decrementScore();
+                    currentPlayer.decrementScore();
+                    swapPlayers();
+                }
+                if (lossStreak == 2) {
+                    gameOver = true;
+                    determineWinner();
+                }
             }
+
         }
     }
 
@@ -164,16 +190,16 @@ public class MathGame {
             correctAnswer = (int) Math.pow(num1, num3) + (num2 * num4);
         } else if (operation == 2) {
             num2 = (int) (Math.random() * 100) + 1;
-            System.out.print(num1 + "^" + (num4 / 4) + " - " + num2 + "/" + num3 + " = ");
+            System.out.print(num1 + "^" + num3 + " - " + num2 + "/" + num3 + " = ");
             correctAnswer = (int) Math.pow(num1, num4 / 4) - (num2 / num3);
         } else if (operation == 3) {
             num2 = (int) (Math.random() * 10) + 1;
-            System.out.print(num1 + " * " + num2 + " = ");
-            correctAnswer = num1 * num2;
+            System.out.print(num1 + " * " + num2 + num3 + " * " + num2 + num4 + " = ");
+            correctAnswer = num1 * (num2 + num3) * (num2 + num4);
         } else {  // option == 4
             num2 = (int) (Math.random() * 10) + 1;
-            System.out.print(num1 + " / " + num2 + " = ");
-            correctAnswer = num1 / num2;
+            System.out.print(num1 + " / " + num2 + " + " + num3 + " / " + num2 + " + " + num4 + "/" + num1 + " = ");
+            correctAnswer = (num1 / num2) + (num3 / num2) + (num4 / num1);
         }
 
         int playerAnswer = scanner.nextInt(); // get player's answer using Scanner
@@ -182,6 +208,7 @@ public class MathGame {
         if (playerAnswer == correctAnswer) {
             return true;
         } else {
+            System.out.println("The correct answer was: " + correctAnswer);
             return false;
         }
     }
